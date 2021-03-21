@@ -12,7 +12,8 @@ import {REQUEST_AUTHOR_LIST} from '../redux/action/authorActions';
 import AuthorCard from '../components/AuthorCard';
 import {responsiveHeight} from '../utils/Scale';
 import {DEFAULT_PAGINATION_DATA} from '../const/AppConst';
-
+import {AppColors} from '../const/Theme';
+import Title from '../components/Title';
 const Home = (props) => {
   const {authorList, navigation} = props;
   const [pagination, setPagination] = useState({
@@ -30,7 +31,7 @@ const Home = (props) => {
   }, [isLoading]);
 
   const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
-    const paddingToBottom = 1;
+    const paddingToBottom = 5;
     return (
       layoutMeasurement.height + contentOffset.y >=
       contentSize.height - paddingToBottom
@@ -42,7 +43,7 @@ const Home = (props) => {
     setPagination({
       ...pagination,
       page: pagination.page + 1,
-      limit: pagination.limit + 5,
+      limit: pagination.limit + 20,
     });
     setIsLoading(true);
   };
@@ -68,14 +69,15 @@ const Home = (props) => {
             );
           })
         ) : (
-          <Text>{'NO DATA FOUND'}</Text>
+          <Title style={{alignSelf: 'center'}} title="NO DATA FOUND" />
         )}
       </ScrollView>
-      <ActivityIndicator size={'large'} animating={true} />
-      {/* <Button
-        title="Go to Details"
-        onPress={() => props.navigation.navigate(SCREEN.DETAILS)}
-      /> */}
+      <ActivityIndicator
+        style={styles.loaderStyle}
+        color={AppColors.theme_blue}
+        size={'large'}
+        animating={isLoading}
+      />
     </View>
   );
 };
@@ -102,5 +104,12 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     paddingBottom: responsiveHeight(5),
+    zIndex: 1,
+  },
+  loaderStyle: {
+    marginTop: responsiveHeight(3),
+    position: 'absolute',
+    bottom: 5,
+    alignSelf: 'center',
   },
 });

@@ -5,9 +5,13 @@ import { SCREEN } from '../const/NavigationConsts';
 
 const Details = (props) => {
   const data = idx(props, (_) => _.route.params.data) || [];
+  const first_name = idx(data, (_) => _.firstName) || '';
+  const last_name = idx(data, (_) => _.lastName) || '';
+  const phone = idx(data, (_) => _.phone) || '';
   return (
     <View style={styles.container}>
-      <Text>{data.firstName}</Text>
+      <Text>{`${first_name} ${last_name}`}</Text>
+      <Text>{phone}</Text>
       
     </View>
   );
@@ -19,6 +23,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
   },
 });

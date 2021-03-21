@@ -1,17 +1,17 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {SCREEN,STACK} from '../const/NavigationConsts';
+import {SCREEN, STACK} from '../const/NavigationConsts';
 import Home from '../screens/Home';
 import AuthorDetails from '../screens/AuthorDetails';
 import {createDrawerNavigator} from '@react-navigation/drawer';
+import TopLikes from '../screens/LikeStack/TopLikes';
+import TopComments from '../screens/CommentStack/TopComments';
 export const AuthContext = React.createContext();
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 export default function App({navigation}) {
-  const authContext = React.useMemo(() => ({}), []);
-
   function HomeStack() {
     return (
       <Stack.Navigator
@@ -23,11 +23,33 @@ export default function App({navigation}) {
     );
   }
 
+  function LikeStack() {
+    return (
+      <Stack.Navigator
+        initialRouteName={SCREEN.TOP_LIKES}
+        screenOptions={{headerShown: false}}>
+        <Stack.Screen name={SCREEN.TOP_LIKES} component={TopLikes} />
+      </Stack.Navigator>
+    );
+  }
+
+  function CommentStack() {
+    return (
+      <Stack.Navigator
+        initialRouteName={SCREEN.TOP_COMMENTS}
+        screenOptions={{headerShown: false}}>
+        <Stack.Screen name={SCREEN.TOP_COMMENTS} component={TopComments} />
+      </Stack.Navigator>
+    );
+  }
+
   return (
-    <AuthContext.Provider value={authContext}>
+    <AuthContext.Provider>
       <NavigationContainer>
         <Drawer.Navigator>
           <Drawer.Screen name={STACK.HOMESTACK} component={HomeStack} />
+          <Drawer.Screen name={STACK.LIKED} component={LikeStack} />
+          <Drawer.Screen name={STACK.COMMENTED} component={CommentStack} />
         </Drawer.Navigator>
       </NavigationContainer>
     </AuthContext.Provider>

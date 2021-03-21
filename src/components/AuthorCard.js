@@ -20,13 +20,14 @@ import idx from 'idx';
 const AuthorCard = (props) => {
   const cardData = idx(props, (_) => _.data) || [];
   const first_name = idx(cardData, (_) => _.firstName) || '';
+  const last_name = idx(cardData, (_) => _.lastName) || '';
   return (
     <TouchableOpacity
       disabled={props.isDisabled}
-    onPress={props.onPress}
+      onPress={props.onPress}
       style={[styles.container, styles.elevation]}>
       <View style={styles.infoContainer}>
-        <Text>{first_name}</Text>
+        <Text>{`${first_name} ${last_name}`}</Text>
       </View>
     </TouchableOpacity>
   );
