@@ -6,10 +6,12 @@ import {
 } from '../const/ApiConst';
 import {
   DEFAULT_PAGINATION_DATA,
+  SORTING_TYPE,
   TOP_COMMENTS_LIMIT,
   TOP_LIKES_LIMIT,
 } from '../const/AppConst';
 import idx from 'idx';
+import Toast from 'react-native-simple-toast';
 
 export const getAuthors = (data) => {
   const pagesToLoad = idx(data, (_) => _.page) || DEFAULT_PAGINATION_DATA.PAGE;
@@ -21,7 +23,11 @@ export const getAuthors = (data) => {
     .then((res) => {
       const responseData = idx(res, (_) => _.data);
       const status = idx(res, (_) => _.status);
-      return {status, data: responseData};
+      if (pagesToLoad > 1 && responseData.length === 0) {
+        Toast.show('No more data found!');
+      } else {
+        return {status, data: responseData};
+      }
     })
     .catch((error) => {
       const status = idx(error, (_) => _.response.status);
@@ -45,7 +51,11 @@ export const getPosts = (data) => {
     .then((res) => {
       const responseData = idx(res, (_) => _.data);
       const status = idx(res, (_) => _.status);
-      return {status, data: responseData};
+      if (pagesToLoad > 1 && responseData.length === 0) {
+        Toast.show('No more data found!');
+      } else {
+        return {status, data: responseData};
+      }
     })
     .catch((error) => {
       const status = idx(error, (_) => _.response.status);
@@ -58,7 +68,7 @@ export const getPosts = (data) => {
 export const getTopLikedPost = () => {
   return axios
     .get(
-      `${GET_POSTS}?_sort=${'numLikes'}&_order${'desc'}&_limit=${TOP_LIKES_LIMIT}`,
+      `${GET_POSTS}?_sort=${SORTING_TYPE.NO_OF_LIKES_PARAM}&_order${SORTING_TYPE.DESCENDING}&_limit=${TOP_LIKES_LIMIT}`,
       {
         headers: {},
       },
@@ -79,7 +89,7 @@ export const getTopLikedPost = () => {
 export const getTopCommentedPost = () => {
   return axios
     .get(
-      `${GET_POSTS}?_sort=${'numComments'}&_order${'desc'}&_limit=${TOP_COMMENTS_LIMIT}`,
+      `${GET_POSTS}?_sort=${SORTING_TYPE.NO_OF_COMMENTS_PARAM}&_order${SORTING_TYPE.DESCENDING}&_limit=${TOP_COMMENTS_LIMIT}`,
       {
         headers: {},
       },

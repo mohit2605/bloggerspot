@@ -27,9 +27,14 @@ const Home = (props) => {
 
   useEffect(() => {
     const {getAuthorList} = props;
-    getAuthorList(pagination, (res) => {
-      setIsLoading(false);
-    });
+    if (authorList.length === 0) {
+      setIsLoading(true);
+    }
+    setTimeout(() => {
+      getAuthorList(pagination, (res) => {
+        setIsLoading(false);
+      });
+    }, 5000);
   }, [isLoading]);
 
   const onReachedEnd = () => {
