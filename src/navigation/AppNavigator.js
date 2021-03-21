@@ -44,14 +44,12 @@ export default function App({navigation}) {
   }
 
   return (
-    <AuthContext.Provider>
-      <NavigationContainer>
-        <Drawer.Navigator>
-          <Drawer.Screen name={STACK.HOMESTACK} component={HomeStack} />
-          <Drawer.Screen name={STACK.LIKED} component={LikeStack} />
-          <Drawer.Screen name={STACK.COMMENTED} component={CommentStack} />
-        </Drawer.Navigator>
-      </NavigationContainer>
-    </AuthContext.Provider>
+    <NavigationContainer>
+      <Drawer.Navigator>
+        <Drawer.Screen name={STACK.HOMESTACK} component={HomeStack} />
+        <Drawer.Screen name={STACK.LIKED} component={LikeStack} />
+        <Drawer.Screen name={STACK.COMMENTED} component={CommentStack} />
+      </Drawer.Navigator>
+    </NavigationContainer>
   );
 }

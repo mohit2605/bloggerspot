@@ -9,7 +9,12 @@ import {
   REQUEST_POST_LIST_ERROR,
   REQUEST_POST_LIST_SUCCESS,
 } from '../action/authorActions';
-import {getAuthors, getComments, getLikes, getPosts} from '../Api';
+import {
+  getAuthors,
+  getTopCommentedPost,
+  getTopLikedPost,
+  getPosts,
+} from '../Api';
 
 export function* authorSaga(action) {
   try {
@@ -49,7 +54,7 @@ export function* postSaga(action) {
 
 export function* likeSaga(action) {
   try {
-    const res = yield call(getLikes, action.data);
+    const res = yield call(getTopLikedPost, action.data);
     const status = res.status;
     const data = res.data;
     if (status === 200) {
@@ -67,7 +72,7 @@ export function* likeSaga(action) {
 
 export function* commentSaga(action) {
   try {
-    const res = yield call(getComments, action.data);
+    const res = yield call(getTopCommentedPost, action.data);
     const status = res.status;
     const data = res.data;
     if (status === 200) {

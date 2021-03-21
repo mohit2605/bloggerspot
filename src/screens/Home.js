@@ -14,6 +14,8 @@ import {responsiveHeight} from '../utils/Scale';
 import {DEFAULT_PAGINATION_DATA} from '../const/AppConst';
 import {AppColors} from '../const/Theme';
 import Title from '../components/Title';
+import {isCloseToBottom} from '../utils/utilFunctions';
+
 const Home = (props) => {
   const {authorList, navigation} = props;
   const [pagination, setPagination] = useState({
@@ -29,14 +31,6 @@ const Home = (props) => {
       setIsLoading(false);
     });
   }, [isLoading]);
-
-  const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
-    const paddingToBottom = 5;
-    return (
-      layoutMeasurement.height + contentOffset.y >=
-      contentSize.height - paddingToBottom
-    );
-  };
 
   const onReachedEnd = () => {
     console.log(pagination);
