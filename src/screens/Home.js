@@ -1,20 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {
-  ScrollView,
-  View,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-} from 'react-native';
+import {View, StyleSheet, FlatList} from 'react-native';
 import {SCREEN} from '../const/NavigationConsts';
 import {connect} from 'react-redux';
 import {REQUEST_AUTHOR_LIST} from '../redux/action/authorActions';
 import AuthorCard from '../components/AuthorCard';
-import {responsiveHeight} from '../utils/Scale';
+import {responsiveFontSize, responsiveHeight} from '../utils/Scale';
 import {DEFAULT_PAGINATION_DATA} from '../const/AppConst';
-import {AppColors} from '../const/Theme';
 import Title from '../components/Title';
-import {isCloseToBottom} from '../utils/utilFunctions';
+import {COMMON_STRINGS, STRINGS} from '../const/Strings';
+import CustomLoader from '../components/CustomLoader';
 
 const Home = (props) => {
   const {authorList, navigation} = props;
@@ -34,49 +28,42 @@ const Home = (props) => {
       getAuthorList(pagination, (res) => {
         setIsLoading(false);
       });
-    }, 5000);
+    }, 1000);
   }, [isLoading]);
 
   const onReachedEnd = () => {
-    console.log(pagination);
+    setIsLoading(true);
     setPagination({
       ...pagination,
       page: pagination.page + 1,
       limit: pagination.limit + 20,
     });
-    setIsLoading(true);
+  };
+
+  const renderListItem = (el) => {
+    return (
+      <AuthorCard
+        onPress={() => navigation.navigate(SCREEN.DETAILS, {data: el.item})}
+        data={el.item}
+      />
+    );
   };
 
   return (
     <View style={styles.container}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        onScroll={({nativeEvent}) => {
-          if (isCloseToBottom(nativeEvent)) {
-            onReachedEnd();
-          }
-        }}
-        contentContainerStyle={styles.scrollContainer}>
-        {authorList.length > 0 ? (
-          authorList.map((el, i) => {
-            return (
-              <AuthorCard
-                onPress={() => navigation.navigate(SCREEN.DETAILS, {data: el})}
-                data={el}
-                key={i}
-              />
-            );
-          })
-        ) : (
-          <Title style={{alignSelf: 'center'}} title="NO DATA FOUND" />
-        )}
-      </ScrollView>
-      <ActivityIndicator
-        style={styles.loaderStyle}
-        color={AppColors.theme_blue}
-        size={'large'}
-        animating={isLoading}
-      />
+      <Title style={styles.header} title={STRINGS.AUTHOR} />
+      {authorList.length > 0 ? (
+        <FlatList
+          data={authorList}
+          keyExtractor={(i, index) => index}
+          onEndReachedThreshold={0}
+          onEndReached={onReachedEnd}
+          renderItem={renderListItem}
+        />
+      ) : (
+        <Title style={{alignSelf: 'center'}} title={COMMON_STRINGS.NO_DATA} />
+      )}
+      <CustomLoader isVisible={isLoading} />
     </View>
   );
 };
@@ -110,5 +97,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 5,
     alignSelf: 'center',
+  },
+  header: {
+    alignSelf: 'center',
+    marginTop: responsiveHeight(2),
+    fontSize: responsiveFontSize(2.8),
+    fontWeight: 'bold',
   },
 });

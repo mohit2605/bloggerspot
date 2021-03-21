@@ -1,18 +1,10 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Image,
-  Text,
-  TouchableOpacity,
-  Platform,
-} from 'react-native';
+import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import {
   responsiveHeight,
   responsiveWidth,
   responsiveFontSize,
 } from '../utils/Scale';
-import {AppColors} from '../const/Theme';
 import PropTypes from 'prop-types';
 import DefaultProps from '../const/DefaultProps';
 import idx from 'idx';
@@ -25,9 +17,9 @@ const AuthorCard = (props) => {
     <TouchableOpacity
       disabled={props.isDisabled}
       onPress={props.onPress}
-      style={[styles.container, styles.elevation]}>
+      style={styles.container}>
       <View style={styles.infoContainer}>
-        <Text>{`${first_name} ${last_name}`}</Text>
+        <Text style={styles.title}>{`${first_name} ${last_name}`}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -47,26 +39,16 @@ export default AuthorCard;
 
 const styles = StyleSheet.create({
   container: {
-    width: '90%',
-    paddingVertical: responsiveHeight(2),
-    backgroundColor: AppColors.white,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 8,
-    marginTop: responsiveHeight(2),
-    paddingRight: responsiveHeight(2),
-    paddingLeft: responsiveHeight(1),
+    paddingHorizontal: responsiveWidth(4),
+    marginVertical: responsiveHeight(2),
+    marginHorizontal: responsiveHeight(2),
+    borderWidth: 1,
+    borderRadius: 25,
   },
-  elevation: {
-    marginBottom: responsiveHeight(0.5),
-    marginHorizontal: responsiveWidth(5),
-    // shadowColor: AppColors.grey,
-    shadowOpacity: 1,
-    elevation: 5,
-    shadowOffset: {
-      height: 0,
-      width: 0,
-    },
+  title: {
+    fontSize: responsiveFontSize(2),
+  },
+  infoContainer: {
+    paddingVertical: responsiveHeight(2),
   },
 });

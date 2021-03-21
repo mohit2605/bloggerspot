@@ -1,21 +1,21 @@
 import * as React from 'react';
 import {useEffect, useState} from 'react';
-import {
-  ScrollView,
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import {FlatList, View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import idx from 'idx';
 import {connect} from 'react-redux';
 import {REQUEST_POST_LIST} from '../redux/action/authorActions';
-import {DEFAULT_PAGINATION_DATA, SORTING_TYPE} from '../const/AppConst';
-import {isCloseToBottom} from '../utils/utilFunctions';
+import {DEFAULT_PAGINATION_DATA} from '../const/AppConst';
 import PostCard from '../components/PostCard';
 import Title from '../components/Title';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {AppColors} from '../const/Theme';
+import {
+  responsiveFontSize,
+  responsiveHeight,
+  responsiveWidth,
+} from '../utils/Scale';
+import {COMMON_STRINGS, STRINGS} from '../const/Strings';
+import CustomLoader from '../components/CustomLoader';
 
 const Details = (props) => {
   const {postList} = props;
@@ -31,7 +31,7 @@ const Details = (props) => {
   const [postListState, setPostListState] = useState([]);
   const [likeSortAsc, setLikeSort] = useState(true);
   const [dateSortAsc, setDateSort] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const {getPostByAuthorId} = props;
@@ -39,7 +39,9 @@ const Details = (props) => {
       authorID,
       ...pagination,
     };
-    getPostByAuthorId(data, (res) => {});
+    getPostByAuthorId(data, (res) => {
+      setIsLoading(false);
+    });
   }, [pagination]);
 
   useEffect(() => {
@@ -47,12 +49,12 @@ const Details = (props) => {
   }, [postList]);
 
   const onReachedEnd = () => {
+    setIsLoading(true);
     setPagination({
       ...pagination,
       page: pagination.page + 1,
       limit: pagination.limit + 20,
     });
-    setIsLoading(true);
   };
 
   const handleSortByDate = (isAsc) => {
@@ -77,53 +79,57 @@ const Details = (props) => {
     setPostListState(postArray);
   };
 
+  const renderListItem = (el) => {
+    const title = idx(el, (_) => _.item.title) || '';
+    return <PostCard title={title} />;
+  };
+
   return (
     <View style={styles.container}>
-      <Text>{`${first_name} ${last_name}`}</Text>
-      <Text>{phone}</Text>
-      <View>
-        <Text>Sort By</Text>
-        <TouchableOpacity
-          onPress={() => {
-            handleSortByDate(dateSortAsc);
-          }}>
-          <FontAwesome
-            name={dateSortAsc ? 'sort-amount-asc' : 'sort-amount-desc'}
-            size={30}
-            color={AppColors.theme_blue}
-          />
-          <Text>{'Date Published'}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            handleSortByNumOfLikes(likeSortAsc);
-          }}>
-          <FontAwesome
-            name={likeSortAsc ? 'sort-amount-asc' : 'sort-amount-desc'}
-            size={30}
-            color={AppColors.theme_blue}
-          />
-          <Text>{'Number Of Likes'}</Text>
-        </TouchableOpacity>
+      <CustomLoader isVisible={isLoading} />
+      <Text style={styles.header}>{`${first_name} ${last_name}`}</Text>
+      <Text style={styles.phone}>{phone}</Text>
+      <View style={styles.sortingContainer}>
+        <Text style={styles.sortByText}>Sort By</Text>
+        <View style={styles.btnContainer}>
+          <TouchableOpacity
+            style={styles.sortingBtn}
+            onPress={() => {
+              handleSortByDate(dateSortAsc);
+            }}>
+            <FontAwesome
+              name={dateSortAsc ? 'sort-amount-asc' : 'sort-amount-desc'}
+              size={30}
+              color={AppColors.theme_blue}
+            />
+            <Text style={styles.btnText}>{STRINGS.DATE_PUBLISHED}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.sortingBtn}
+            onPress={() => {
+              handleSortByNumOfLikes(likeSortAsc);
+            }}>
+            <FontAwesome
+              name={likeSortAsc ? 'sort-amount-asc' : 'sort-amount-desc'}
+              size={30}
+              color={AppColors.theme_blue}
+            />
+            <Text style={styles.btnText}>{STRINGS.NO_OF_LIKES}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        onScroll={({nativeEvent}) => {
-          if (isCloseToBottom(nativeEvent)) {
-            onReachedEnd();
-          }
-        }}
-        contentContainerStyle={styles.scrollContainer}>
-        {postListState.length > 0 ? (
-          postListState.map((el, i) => {
-            const title = idx(el, (_) => _.numLikes) || '';
-            return <PostCard title={title} key={i} />;
-          })
-        ) : (
-          <Title style={{alignSelf: 'center'}} title="NO DATA FOUND" />
-        )}
-      </ScrollView>
+      {postListState.length > 0 ? (
+        <FlatList
+          data={postListState}
+          keyExtractor={(i, index) => index}
+          onEndReachedThreshold={0}
+          onEndReached={onReachedEnd}
+          renderItem={renderListItem}
+        />
+      ) : (
+        <Title style={{alignSelf: 'center'}} title={COMMON_STRINGS.NO_DATA} />
+      )}
     </View>
   );
 };
@@ -147,6 +153,45 @@ export default connect(mapStateToProps, mapDispatchToProps)(Details);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  header: {
+    alignSelf: 'center',
+    marginTop: responsiveHeight(2),
+    fontSize: responsiveFontSize(2.8),
+    fontWeight: 'bold',
+  },
+  phone: {
+    alignSelf: 'center',
+    fontSize: responsiveFontSize(2.2),
+    fontWeight: '800',
+  },
+  btnText: {
+    fontSize: responsiveFontSize(2),
+    fontWeight: '800',
+    marginRight: responsiveWidth(1),
+  },
+  sortingBtn: {
+    flexDirection: 'row',
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
+  },
+  scrollContainer: {
+    paddingBottom: responsiveHeight(5),
+  },
+  btnContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+  },
+  sortingContainer: {
     alignItems: 'center',
+    marginTop: responsiveHeight(3),
+    marginBottom: responsiveHeight(3),
+  },
+  sortByText: {
+    fontSize: responsiveFontSize(2),
+    fontWeight: '600',
+    marginBottom: responsiveHeight(2),
   },
 });

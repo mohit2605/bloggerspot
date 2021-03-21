@@ -45,7 +45,7 @@ export default function App({navigation}) {
 
   return (
     <NavigationContainer>
-      <Drawer.Navigator>
+      <Drawer.Navigator backBehavior={'none'}>
         <Drawer.Screen name={STACK.HOMESTACK} component={HomeStack} />
         <Drawer.Screen name={STACK.LIKED} component={LikeStack} />
         <Drawer.Screen name={STACK.COMMENTED} component={CommentStack} />

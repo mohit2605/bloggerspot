@@ -45,15 +45,11 @@ const styles = StyleSheet.create({
     marginTop: responsiveHeight(2),
     paddingRight: responsiveHeight(2),
     paddingLeft: responsiveHeight(1),
+    borderWidth: 1,
+    borderRadius: 25,
   },
   elevation: {
     marginBottom: responsiveHeight(0.5),
     marginHorizontal: responsiveWidth(5),
-    shadowOpacity: 1,
-    elevation: 5,
-    shadowOffset: {
-      height: 0,
-      width: 0,
-    },
   },
 });
