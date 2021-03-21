@@ -68,7 +68,7 @@ export const getPosts = (data) => {
 export const getTopLikedPost = () => {
   return axios
     .get(
-      `${GET_POSTS}?_sort=${SORTING_TYPE.NO_OF_LIKES_PARAM}&_order${SORTING_TYPE.DESCENDING}&_limit=${TOP_LIKES_LIMIT}`,
+      `${GET_POSTS}?_sort=${SORTING_TYPE.NO_OF_LIKES_PARAM}&_order=${SORTING_TYPE.DESCENDING}&_limit=${TOP_LIKES_LIMIT}`,
       {
         headers: {},
       },
@@ -89,7 +89,7 @@ export const getTopLikedPost = () => {
 export const getTopCommentedPost = () => {
   return axios
     .get(
-      `${GET_POSTS}?_sort=${SORTING_TYPE.NO_OF_COMMENTS_PARAM}&_order${SORTING_TYPE.DESCENDING}&_limit=${TOP_COMMENTS_LIMIT}`,
+      `${GET_POSTS}?_sort=${SORTING_TYPE.NO_OF_COMMENTS_PARAM}&_order=${SORTING_TYPE.DESCENDING}&_limit=${TOP_COMMENTS_LIMIT}`,
       {
         headers: {},
       },

@@ -32,7 +32,8 @@ const TopComments = (props) => {
         {commentList.length > 0 ? (
           commentList.map((el, i) => {
             const title = idx(el, (_) => _.title) || '';
-            return <TopListCard title={title} key={i} />;
+            const numComments = idx(el, (_) => _.numComments) || '';
+            return <TopListCard isComment title={title} numOfComments={numComments} key={i} />;
           })
         ) : (
           <Title style={{alignSelf: 'center'}} title={COMMON_STRINGS.NO_DATA} />

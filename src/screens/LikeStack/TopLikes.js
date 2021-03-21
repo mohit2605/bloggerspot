@@ -32,7 +32,8 @@ const TopLikes = (props) => {
         {likesList.length > 0 ? (
           likesList.map((el, i) => {
             const title = idx(el, (_) => _.title) || '';
-            return <TopListCard title={title} key={i} />;
+            const numLikes = idx(el, (_) => _.numLikes) || '';
+            return <TopListCard isLike numOfLikes={numLikes} title={title} key={i} />;
           })
         ) : (
           <Title style={styles.noDataView} title={COMMON_STRINGS.NO_DATA} />
