@@ -8,7 +8,9 @@ const STRINGS = {
   TOP_10_LIKED: 'Top 10 Liked Post',
   DATE_PUBLISHED: 'Date Published',
   NO_OF_LIKES: 'Number Of Likes',
-  AUTHOR: 'AUTHORS'
+  AUTHOR: 'AUTHORS',
+  NO_COMMENTS: 'NO COMMENTS FOUND',
+
 };
 
 export {COMMON_STRINGS, STRINGS};

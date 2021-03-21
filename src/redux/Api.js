@@ -106,3 +106,21 @@ export const getTopCommentedPost = () => {
       return {status, data: eData};
     });
 };
+
+export const getCommentsByPostId = (postId) => {
+  return axios
+    .get(`${GET_POSTS}/${postId}/comments`, {
+      headers: {},
+    })
+    .then((res) => {
+      const responseData = idx(res, (_) => _.data);
+      const status = idx(res, (_) => _.status);
+      return {status, data: responseData};
+    })
+    .catch((error) => {
+      const status = idx(error, (_) => _.response.status);
+      const eData =
+        idx(error, (_) => _.response.data) || DEFAULT_ERROR_RESPONSE;
+      return {status, data: eData};
+    });
+};

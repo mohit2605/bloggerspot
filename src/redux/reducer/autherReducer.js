@@ -1,6 +1,7 @@
 import {CLEAR_REDUCER_STATE} from '../action/common';
 import {
   REQUEST_AUTHOR_LIST_SUCCESS,
+  REQUEST_COMMENTS_BY_POST_SUCCESS,
   REQUEST_COMMENT_LIST_SUCCESS,
   REQUEST_LIKES_LIST_SUCCESS,
   REQUEST_POST_LIST_SUCCESS,
@@ -10,6 +11,7 @@ const initialState = {
   likesList: [],
   commentList: [],
   postList: [],
+  commentsByPost: [],
 };
 
 const autherReducer = (state = initialState, action) => {
@@ -33,6 +35,11 @@ const autherReducer = (state = initialState, action) => {
       return {
         ...state,
         postList: action.data,
+      };
+    case REQUEST_COMMENTS_BY_POST_SUCCESS:
+      return {
+        ...state,
+        commentsByPost: action.data,
       };
     case CLEAR_REDUCER_STATE:
       return initialState;

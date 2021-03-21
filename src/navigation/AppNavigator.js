@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {SCREEN, STACK} from '../const/NavigationConsts';
 import Home from '../screens/Home';
 import AuthorDetails from '../screens/AuthorDetails';
+import PostDetails from '../screens/PostDetails';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import TopLikes from '../screens/LikeStack/TopLikes';
 import TopComments from '../screens/CommentStack/TopComments';
@@ -19,6 +20,7 @@ export default function App({navigation}) {
         screenOptions={{headerShown: false}}>
         <Stack.Screen name={SCREEN.HOME} component={Home} />
         <Stack.Screen name={SCREEN.DETAILS} component={AuthorDetails} />
+        <Stack.Screen name={SCREEN.POST_DETAILS} component={PostDetails} />
       </Stack.Navigator>
     );
   }

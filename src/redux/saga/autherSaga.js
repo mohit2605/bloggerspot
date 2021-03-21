@@ -2,6 +2,8 @@ import {call, put} from 'redux-saga/effects';
 import {
   REQUEST_AUTHOR_LIST_ERROR,
   REQUEST_AUTHOR_LIST_SUCCESS,
+  REQUEST_COMMENTS_BY_POST_ERROR,
+  REQUEST_COMMENTS_BY_POST_SUCCESS,
   REQUEST_COMMENT_LIST_ERROR,
   REQUEST_COMMENT_LIST_SUCCESS,
   REQUEST_LIKES_LIST_ERROR,
@@ -14,6 +16,7 @@ import {
   getTopCommentedPost,
   getTopLikedPost,
   getPosts,
+  getCommentsByPostId,
 } from '../Api';
 
 export function* authorSaga(action) {
@@ -84,6 +87,24 @@ export function* commentSaga(action) {
     }
   } catch (error) {
     yield put({type: REQUEST_COMMENT_LIST_ERROR, error});
+    action.callBack(error);
+  }
+}
+
+export function* commentsByPostSaga(action) {
+  try {
+    const res = yield call(getCommentsByPostId, action.data);
+    const status = res.status;
+    const data = res.data;
+    if (status === 200) {
+      yield put({type: REQUEST_COMMENTS_BY_POST_SUCCESS, data});
+      action.callBack(data);
+    } else {
+      yield put({type: REQUEST_COMMENTS_BY_POST_ERROR, data});
+      action.callBack(data);
+    }
+  } catch (error) {
+    yield put({type: REQUEST_COMMENTS_BY_POST_ERROR, error});
     action.callBack(error);
   }
 }

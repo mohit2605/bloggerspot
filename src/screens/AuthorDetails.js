@@ -9,6 +9,7 @@ import PostCard from '../components/PostCard';
 import Title from '../components/Title';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {AppColors} from '../const/Theme';
+import {SCREEN} from '../const/NavigationConsts';
 import {
   responsiveFontSize,
   responsiveHeight,
@@ -18,7 +19,7 @@ import {COMMON_STRINGS, STRINGS} from '../const/Strings';
 import CustomLoader from '../components/CustomLoader';
 
 const Details = (props) => {
-  const {postList} = props;
+  const {postList, navigation} = props;
   const data = idx(props, (_) => _.route.params.data) || [];
   const authorID = idx(data, (_) => _.id) || '';
   const first_name = idx(data, (_) => _.firstName) || '';
@@ -81,7 +82,14 @@ const Details = (props) => {
 
   const renderListItem = (el) => {
     const title = idx(el, (_) => _.item.title) || '';
-    return <PostCard title={title} />;
+    return (
+      <PostCard
+        onPress={() => {
+          navigation.navigate(SCREEN.POST_DETAILS, {data: el.item});
+        }}
+        title={title}
+      />
+    );
   };
 
   return (
